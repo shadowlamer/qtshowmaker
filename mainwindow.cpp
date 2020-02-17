@@ -53,7 +53,7 @@ void MainWindow::exportAll() {
     QFile bundle(fileName);
     bundle.open(QIODevice::WriteOnly);
     for (int itemIndex = 0; itemIndex < ui->listWidget->count(); itemIndex++) {
-        QListWidgetItem *item = ui->listWidget->takeItem(0);
+        QListWidgetItem *item = ui->listWidget->item(itemIndex);
         QColor colors[1024 * 36];
         uint32_t bytes[1024 * 36];
         iconToColors(item->icon(), QSize(1024, 36),colors);
