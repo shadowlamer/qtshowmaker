@@ -91,6 +91,11 @@ void MainWindow::moveDown()
     }
 }
 
+void MainWindow::removeAll()
+{
+    ui->listWidget->clear();
+}
+
 void MainWindow::showImage(QListWidgetItem *item) {
 
     QPixmap previewPixmap(QSize(300,300));

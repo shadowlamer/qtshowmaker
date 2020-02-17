@@ -568,13 +568,22 @@
    <property name="text">
     <string>&amp;New project</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
+   </property>
   </action>
   <action name="action_Save">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Save...</string>
    </property>
   </action>
   <action name="action_Open">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Open...</string>
    </property>
@@ -713,6 +722,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>action_New_project</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>removeAll()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>245</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addImage()</slot>
@@ -721,5 +746,6 @@
   <slot>removeImage()</slot>
   <slot>moveUp()</slot>
   <slot>moveDown()</slot>
+  <slot>removeAll()</slot>
  </slots>
 </ui>

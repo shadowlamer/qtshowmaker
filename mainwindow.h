@@ -24,6 +24,7 @@ private slots:
   void exportAll();
   void moveUp();
   void moveDown();
+  void removeAll();
   void showImage(QListWidgetItem*);
 
 private:
