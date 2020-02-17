@@ -1,22 +1,32 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QListWidget>
 #include <QMainWindow>
+#include <QPainter>
+
 
 namespace Ui {
-class MainWindow;
+  class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+  explicit MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
+
+private slots:
+  void addImage();
+  void removeImage();
+  void exportAll();
+  void moveUp();
+  void moveDown();
+  void showImage(QListWidgetItem*);
 
 private:
-    Ui::MainWindow *ui;
+  Ui::MainWindow *ui;
 };
-
 #endif // MAINWINDOW_H
