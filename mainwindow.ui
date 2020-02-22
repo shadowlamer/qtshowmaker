@@ -590,7 +590,7 @@
   </action>
   <action name="action_Load_to_device">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>&amp;Load to device</string>
@@ -738,6 +738,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>action_Load_to_device</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>upload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>245</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addImage()</slot>
@@ -747,5 +763,6 @@
   <slot>moveUp()</slot>
   <slot>moveDown()</slot>
   <slot>removeAll()</slot>
+  <slot>upload()</slot>
  </slots>
 </ui>

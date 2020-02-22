@@ -1,10 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QFileDialog>
-#include <QtMath>
-#include <QFile>
-#include <QDebug>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,24 +47,9 @@ void iconToColors(QIcon icon, QSize size, QColor *buf) {
 void MainWindow::exportAll() {
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     "Save bundle", "..", "Disk images (*.img)");
-    QFile bundle(fileName);
-    bundle.open(QIODevice::WriteOnly);
-    for (int itemIndex = 0; itemIndex < ui->listWidget->count(); itemIndex++) {
-        QListWidgetItem *item = ui->listWidget->item(itemIndex);
-        QColor colors[1024 * 36];
-        uint32_t bytes[1024 * 36];
-        iconToColors(item->icon(), QSize(1024, 36),colors);
-        for (int i = 0; i < 1024 * 36; i++) {
-
-            QColor color = colors[i];
-            int r,g,b;
-            color.getRgb(&r, &g, &b);
-            bytes[i] = (r & 0xff) | (g & 0xff) << 8 | (b & 0xff) << 16;
-        }
-        bundle.write((char *)bytes, 1024 * 36 * 4);
-    }
-    bundle.close();
+    exportToFile(fileName);
 }
+
 
 void MainWindow::moveUp()
 {
@@ -96,6 +78,25 @@ void MainWindow::removeAll()
     ui->listWidget->clear();
 }
 
+void MainWindow::upload()
+{
+    QStringList devices = Device::listDevices();
+    if (devices.empty()) {
+        QMessageBox::information(this, "Devices", "No devices found.", QMessageBox::Ok);
+        return;
+    }
+    for (auto device : devices) {
+        if (QMessageBox::question(
+                    this,
+                    "Uploading...",
+                    QString("Upload bundle to %1?").arg(device),
+                    QMessageBox::Yes,
+                    QMessageBox::No) == QMessageBox::Yes) {
+            exportToFile(device);
+        }
+    }
+}
+
 void MainWindow::showImage(QListWidgetItem *item) {
 
     QPixmap previewPixmap(QSize(300,300));
@@ -119,4 +120,25 @@ void MainWindow::showImage(QListWidgetItem *item) {
         }
     }
     ui->label->setPixmap(previewPixmap);
+}
+
+void MainWindow::exportToFile(QString fileName)
+{
+    QFile bundle(fileName);
+    bundle.open(QIODevice::WriteOnly);
+    for (int itemIndex = 0; itemIndex < ui->listWidget->count(); itemIndex++) {
+        QListWidgetItem *item = ui->listWidget->item(itemIndex);
+        QColor colors[1024 * 36];
+        uint32_t bytes[1024 * 36];
+        iconToColors(item->icon(), QSize(1024, 36),colors);
+        for (int i = 0; i < 1024 * 36; i++) {
+
+            QColor color = colors[i];
+            int r,g,b;
+            color.getRgb(&r, &g, &b);
+            bytes[i] = (r & 0xff) | (g & 0xff) << 8 | (b & 0xff) << 16;
+        }
+        bundle.write((char *)bytes, 1024 * 36 * 4);
+    }
+    bundle.close();
 }
