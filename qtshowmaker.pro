@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    device.cpp
+    device.cpp \
+    project.cpp
 
 HEADERS += \
         mainwindow.h \
-    device.h
+    device.h \
+    project.h
 
 FORMS += \
         mainwindow.ui

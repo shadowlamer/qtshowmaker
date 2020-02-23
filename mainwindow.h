@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include "device.h"
+#include "project.h"
 #include <QFileDialog>
 #include <QtMath>
 #include <QFile>
@@ -24,7 +25,7 @@ public:
   ~MainWindow();
 
 private slots:
-  void addImage();
+  void onAddImageClick();
   void removeImage();
   void exportAll();
   void moveUp();
@@ -32,9 +33,14 @@ private slots:
   void removeAll();
   void upload();
   void showImage(QListWidgetItem*);
+  void onOpenClick();
+  void onSaveClick();
 
 private:
   Ui::MainWindow *ui;
   void exportToFile(QString fileName);
+  Project project;
+  int addImage(QString fileName);
+  QStringList getImgPaths();
 };
 #endif // MAINWINDOW_H

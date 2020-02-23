@@ -5,7 +5,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow) {
+    ui(new Ui::MainWindow),
+    project() {
     ui->setupUi(this);
 }
 
@@ -13,12 +14,27 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::addImage() {
+void MainWindow::onAddImageClick() {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     "Open Image", "..", "Image Files (*.png *.jpg *.jpeg *.bmp)");
+    addImage(fileName);
+}
+
+int MainWindow::addImage(QString fileName) {
     QIcon icon(fileName);
     QListWidgetItem *item = new QListWidgetItem(icon, fileName, ui->listWidget);
     ui->listWidget->addItem(item);
+    return 0;
+}
+
+QStringList MainWindow::getImgPaths()
+{
+    QStringList images;
+    for (int itemIndex = 0; itemIndex < ui->listWidget->count(); itemIndex++) {
+        QListWidgetItem *item = ui->listWidget->item(itemIndex);
+        images.append(item->text());
+    }
+    return images;
 }
 
 void MainWindow::removeImage() {
@@ -75,7 +91,11 @@ void MainWindow::moveDown()
 
 void MainWindow::removeAll()
 {
-    ui->listWidget->clear();
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    "New project", "..", "Showmaker projects (*.show)");
+    if (project.create(fileName) != -1) {
+        ui->listWidget->clear();
+    }
 }
 
 void MainWindow::upload()
@@ -120,6 +140,26 @@ void MainWindow::showImage(QListWidgetItem *item) {
         }
     }
     ui->label->setPixmap(previewPixmap);
+}
+
+void MainWindow::onSaveClick()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    "Save project", "..", "Showmaker projects (*.show)");
+    project.setImages(getImgPaths());
+    project.save();
+}
+
+void MainWindow::onOpenClick()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    "Open project", "..", "Showmaker projects (*.show)");
+    if (project.open(fileName) != -1) {
+        ui->listWidget->clear();
+        for (auto image : project.getImages()) {
+            addImage(image.trimmed());
+        }
+    }
 }
 
 void MainWindow::exportToFile(QString fileName)
